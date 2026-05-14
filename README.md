@@ -34,16 +34,16 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 - **Dashboard Stats** — Overview of users, bookings, services, products, messages
 
 ### Other Features
-- 🌙 Dark mode / Light mode toggle
-- 📱 Fully responsive design (mobile-first)
-- 🛒 Shopping cart with product management
-- 💳 Payment methods with QR code support (Bank, eSewa, Khalti, IME Pay)
-- 🖼️ Image upload via URL or file (DualImageInput component)
-- ✨ Smooth animations with Framer Motion
-- 🎨 Professional UI with shadcn/ui components
-- 💬 Contact message system with read/unread status
-- 📊 Gallery with masonry-style grid layout
-- 🔒 Protected routes and role-based access control
+- Dark mode / Light mode toggle
+- Fully responsive design (mobile-first)
+- Shopping cart with product management
+- Payment methods with QR code support (Bank, eSewa, Khalti, IME Pay)
+- Image upload via URL or file (DualImageInput component)
+- Smooth animations with Framer Motion
+- Professional UI with shadcn/ui components
+- Contact message system with read/unread status
+- Gallery with masonry-style grid layout
+- Protected routes and role-based access control
 
 ---
 
@@ -55,7 +55,8 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 | **TypeScript 5** | Type-safe development |
 | **Tailwind CSS 4** | Utility-first styling |
 | **shadcn/ui** | UI component library (New York style) |
-| **Prisma ORM** | Database ORM (SQLite) |
+| **Prisma ORM** | Database ORM (PostgreSQL) |
+| **Neon** | Serverless PostgreSQL database |
 | **NextAuth.js v4** | Authentication & session management |
 | **Zustand** | Client-side state management |
 | **Framer Motion** | Animations & transitions |
@@ -66,107 +67,110 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 
 ---
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── auth/[...nextauth]/route.ts    # Authentication API
-│   │   ├── bookings/route.ts              # Bookings CRUD
-│   │   ├── content/route.ts               # Site content CRUD
-│   │   ├── gallery/route.ts               # Gallery images CRUD
-│   │   ├── messages/route.ts              # Contact messages CRUD
-│   │   ├── payment-methods/route.ts       # Payment methods CRUD
-│   │   ├── products/route.ts              # Products CRUD
-│   │   ├── register/route.ts              # User registration
-│   │   ├── services/route.ts              # Services CRUD
-│   │   ├── stats/route.ts                 # Dashboard statistics
-│   │   ├── upload/route.ts                # File upload
-│   │   └── users/route.ts                 # User management
-│   ├── layout.tsx                          # Root layout
-│   ├── page.tsx                            # Main page (SPA router)
-│   └── globals.css                         # Global styles
-├── components/
-│   ├── auth/auth-dialog.tsx                # Login/Register dialog
-│   ├── layout/
-│   │   ├── header.tsx                      # Navigation header
-│   │   └── footer.tsx                      # Site footer
-│   ├── pages/
-│   │   ├── home-page.tsx                   # Home page
-│   │   ├── about-page.tsx                  # About page
-│   │   ├── services-page.tsx               # Services page
-│   │   ├── products-page.tsx               # Products page
-│   │   ├── gallery-page.tsx                # Gallery page
-│   │   ├── contact-page.tsx                # Contact page
-│   │   ├── booking-page.tsx                # Booking page
-│   │   ├── admin-panel.tsx                 # Admin panel
-│   │   └── super-admin-panel.tsx           # Super Admin panel
-│   └── ui/                                 # Reusable UI components
-├── lib/
-│   ├── db.ts                               # Prisma client instance
-│   └── utils.ts                            # Utility functions
-├── store/
-│   └── use-app-store.ts                    # Zustand state store
-├── types/
-│   └── index.ts                            # TypeScript type definitions
-└── hooks/
-    └── use-toast.ts                        # Toast notification hook
-```
-
----
-
 ## Getting Started
 
 ### Prerequisites
 - Node.js 18+ or Bun
 - npm, yarn, or bun
+- A [Neon](https://neon.tech) account (free tier available)
 
-### Installation
+### Step 1: Clone and Install
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Chamling420/Star-cuts.git
-   cd Star-cuts
+```bash
+git clone https://github.com/Chamling420/Star-cuts.git
+cd Star-cuts
+bun install
+# or
+npm install
+```
+
+### Step 2: Create a Neon Database
+
+1. Go to [https://neon.tech](https://neon.tech) and sign up for a free account
+2. Create a new project (e.g., "Star Cuts")
+3. Copy the **connection string** — it looks like:
+   ```
+   postgresql://username:password@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```
 
-2. **Install dependencies**
-   ```bash
-   bun install
-   # or
-   npm install
-   ```
+### Step 3: Set Up Environment Variables
 
-3. **Set up environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   DATABASE_URL="file:./dev.db"
-   NEXTAUTH_SECRET="your-secret-key-here"
-   NEXTAUTH_URL="http://localhost:3000"
-   ```
+Create a `.env` file in the root directory:
 
-4. **Set up the database**
-   ```bash
-   bun run db:push
-   # or
-   npx prisma db push
-   ```
+```env
+DATABASE_URL="postgresql://username:password@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+```
 
-5. **Seed the database** (optional — adds demo data and user accounts)
-   ```bash
-   bunx prisma db seed
-   # or
-   npx prisma db seed
-   ```
+> Generate a strong NEXTAUTH_SECRET: `openssl rand -base64 32`
 
-6. **Start the development server**
-   ```bash
-   bun run dev
-   # or
-   npm run dev
-   ```
+### Step 4: Set Up the Database
 
-7. Open [http://localhost:3000](http://localhost:3000) in your browser.
+```bash
+# Push schema to the database
+bun run db:push
+# or
+npx prisma db push
+```
+
+### Step 5: Seed the Database (Adds Demo Data & User Accounts)
+
+```bash
+bun run db:seed
+# or
+npx prisma db seed
+```
+
+### Step 6: Start the Development Server
+
+```bash
+bun run dev
+# or
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Deploy to Vercel (Free Hosting)
+
+### Step 1: Push Code to GitHub
+
+Make sure your code is pushed to the GitHub repository.
+
+### Step 2: Connect to Vercel
+
+1. Go to [https://vercel.com](https://vercel.com) and sign up
+2. Click **"Add New Project"**
+3. Import your GitHub repository: `Chamling420/Star-cuts`
+4. Vercel will auto-detect Next.js
+
+### Step 3: Set Environment Variables in Vercel
+
+In the Vercel project settings, add these **Environment Variables**:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Your Neon PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | A strong secret key (e.g., from `openssl rand -base64 32`) |
+| `NEXTAUTH_URL` | `https://your-app-name.vercel.app` |
+
+### Step 4: Deploy
+
+Click **Deploy** and wait for the build to complete.
+
+### Step 5: Seed the Production Database
+
+After the first successful deployment, seed your production database:
+
+```bash
+# Set DATABASE_URL to your Neon connection string, then:
+npx prisma db seed
+```
+
+Or use the Neon SQL editor to run the seed queries manually.
 
 ---
 
@@ -208,7 +212,7 @@ src/
   - **Users** — View all users, create new accounts, change user roles, delete users
   - **Dashboard Stats** — Overview of total users, bookings, services, products, and messages
 - Full control over the entire system
-- Can promote/demote user roles (User ↔ Admin ↔ Super Admin)
+- Can promote/demote user roles (User to Admin to Super Admin)
 - Can manage all site content and settings
 - Can view and manage all bookings across all users
 
@@ -252,7 +256,7 @@ src/
 
 ## Database Schema
 
-The application uses **SQLite** via Prisma ORM with the following models:
+The application uses **PostgreSQL** (via Neon) with Prisma ORM:
 
 - **User** — id, name, email, password, role (USER/ADMIN/SUPER_ADMIN), image, phone
 - **Service** — id, title, description, price, image, category, duration, featured, active
@@ -262,6 +266,28 @@ The application uses **SQLite** via Prisma ORM with the following models:
 - **GalleryImage** — id, title, image, category, beforeImage, description, active
 - **SiteContent** — id, section, key, value (dynamic content management)
 - **PaymentMethod** — id, type, account details, QR image, active
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/              # API routes (auth, bookings, content, etc.)
+│   ├── layout.tsx        # Root layout
+│   ├── page.tsx          # Main page (SPA router)
+│   └── globals.css       # Global styles
+├── components/
+│   ├── auth/             # Login/Register dialog
+│   ├── layout/           # Header, Footer
+│   ├── pages/            # All page components
+│   └── ui/               # Reusable UI components
+├── lib/                  # Database client, utilities
+├── store/                # Zustand state store
+├── types/                # TypeScript type definitions
+└── hooks/                # Custom React hooks
+```
 
 ---
 
