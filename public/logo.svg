@@ -1,29 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 30 30" style="enable-background:new 0 0 30 30;" xml:space="preserve">
-<defs>
-  <style type="text/css">
-    .st194{fill:#2D2D2D;stroke:#FFFFFF;stroke-width:0.6317;stroke-miterlimit:10;}
-    .st23{fill:#FFFFFF;}
-
-    .z-breathe {
-      animation: breathe 2.5s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-  </style>
-</defs>
-
-<g>
-  <path class="st194" d="M24.51,28.51H5.49c-2.21,0-4-1.79-4-4V5.49c0-2.21,1.79-4,4-4h19.03c2.21,0,4,1.79,4,4v19.03
-    C28.51,26.72,26.72,28.51,24.51,28.51z"/>
-  <g class="z-breathe">
-    <path class="st23" d="M15.47,7.1l-1.3,1.85c-0.2,0.29-0.54,0.47-0.9,0.47h-7.1V7.09C6.16,7.1,15.47,7.1,15.47,7.1z"/>
-    <polygon class="st23" points="24.3,7.1 13.14,22.91 5.7,22.91 16.86,7.1"/>
-    <path class="st23" d="M14.53,22.91l1.31-1.86c0.2-0.29,0.54-0.47,0.9-0.47h7.09v2.33H14.53z"/>
-  </g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8a87c"/>
+      <stop offset="35%" stop-color="#d4845f"/>
+      <stop offset="70%" stop-color="#c96b8e"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5d5a0"/>
+      <stop offset="50%" stop-color="#d4a55a"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+    <linearGradient id="starFill" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" stop-color="#fcd5ce"/>
+      <stop offset="40%" stop-color="#f0b8a8"/>
+      <stop offset="100%" stop-color="#d4845f"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="50" stroke="url(#goldGradient)" stroke-width="3" fill="none"/>
+  <path d="M60 16 L67.2 40.5 L92 40.5 L72 55.8 L79.5 80 L60 65.5 L40.5 80 L48 55.8 L28 40.5 L52.8 40.5 Z" fill="url(#starFill)" stroke="url(#brandGradient)" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M54 34 L46 52 Q44 56 46 58 L50 56 L56 40 Z" fill="url(#goldGradient)" opacity="0.7"/>
+  <path d="M66 34 L74 52 Q76 56 74 58 L70 56 L64 40 Z" fill="url(#goldGradient)" opacity="0.7"/>
+  <circle cx="60" cy="46" r="2.5" fill="url(#goldGradient)"/>
+  <ellipse cx="47" cy="62" rx="5" ry="7" fill="none" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.5"/>
+  <ellipse cx="73" cy="62" rx="5" ry="7" fill="none" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.5"/>
+  <path d="M28 82 Q38 90 48 86 Q54 83 60 87 Q66 91 72 86 Q82 80 92 88" stroke="url(#brandGradient)" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <circle cx="88" cy="22" r="2.2" fill="url(#goldGradient)" opacity="0.9"/>
+  <circle cx="93" cy="28" r="1.3" fill="url(#goldGradient)" opacity="0.6"/>
 </svg>
