@@ -38,23 +38,44 @@ yarn-error.log*
 # vercel
 .vercel
 
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 local-*
+
+# Dev tools & config
 .claude
 .z-ai-config
+.zscripts/
+Caddyfile
+
+# Logs
 *.log
 dev.log
 dev.out.log
-test
-prompt
-
 server.log
-# Skills directory
-/skills/
+
 # Dev context
 /agent-ctx/
 worklog.md
 download/
+prompt
+test
+
+# Skills directory (not part of the salon app)
+/skills/
+
+# Star Cuts zip
+Star Cuts.zip
+
+# Examples (not part of the salon app)
+/examples/
+
+# Mini services
+/mini-services/
+
+# Uploaded files (regenerable)
+/public/uploads/
+
+# Database (generated from seed)
+# db/custom.db
