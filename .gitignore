@@ -62,17 +62,14 @@ download/
 prompt
 test
 
-# Skills directory (not part of the salon app)
+# Not part of the salon app
 /skills/
-
-# Star Cuts zip
-Star-Cuts.zip
-
-# Examples (not part of the salon app)
 /examples/
-
-# Mini services
 /mini-services/
+
+# Star Cuts zip & upload folder (not needed in repo)
+Star-Cuts.zip
+/upload/
 
 # Uploaded files (regenerable)
 /public/uploads/
