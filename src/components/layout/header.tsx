@@ -274,13 +274,6 @@ export function Header() {
                 <User className="mr-1.5 h-4 w-4" />
                 Login
               </Button>
-              <Button
-                size="sm"
-                onClick={openRegister}
-                className="gradient-rose text-sm text-primary-foreground border-0 hover:opacity-90"
-              >
-                Register
-              </Button>
             </div>
           )}
 
@@ -405,15 +398,6 @@ export function Header() {
                 >
                   <User className="mr-2 h-4 w-4" />
                   Login
-                </Button>
-                <Button
-                  onClick={() => {
-                    setMobileMenuOpen(false)
-                    openRegister()
-                  }}
-                  className="gradient-rose w-full border-0 text-primary-foreground hover:opacity-90"
-                >
-                  Register
                 </Button>
               </div>
             )}

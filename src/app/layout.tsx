@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Star Cuts Beauty Salon' }],
   icons: {
-    icon: '/logo.svg',
+    icon: '/logo.svg?v=2',
   },
   openGraph: {
     title: 'Star Cuts Beauty Salon | Premium Hair & Beauty Services',
