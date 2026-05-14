@@ -16,7 +16,7 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 - **Booking** — Appointment booking system with date/time selection and service selection
 
 ### Authentication
-- Login & Register with email/password
+- Login & Register with email/password (combined in one dialog)
 - Session-based auth using NextAuth.js
 - Three user roles: **Super Admin**, **Admin**, **User**
 
@@ -44,6 +44,7 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 - Contact message system with read/unread status
 - Gallery with masonry-style grid layout
 - Protected routes and role-based access control
+- Galaxy animation fallback for hero section
 
 ---
 
@@ -55,8 +56,8 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 | **TypeScript 5** | Type-safe development |
 | **Tailwind CSS 4** | Utility-first styling |
 | **shadcn/ui** | UI component library (New York style) |
-| **Prisma ORM** | Database ORM (PostgreSQL) |
-| **Neon** | Serverless PostgreSQL database |
+| **Prisma ORM** | Database ORM (SQLite) |
+| **SQLite** | Lightweight file-based database (included in repo) |
 | **NextAuth.js v4** | Authentication & session management |
 | **Zustand** | Client-side state management |
 | **Framer Motion** | Animations & transitions |
@@ -64,6 +65,7 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 | **Zod** | Schema validation |
 | **Lucide React** | Icon library |
 | **Recharts** | Data visualization charts |
+| **bcryptjs** | Password hashing |
 
 ---
 
@@ -72,7 +74,6 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 ### Prerequisites
 - Node.js 18+ or Bun
 - npm, yarn, or bun
-- A [Neon](https://neon.tech) account (free tier available)
 
 ### Step 1: Clone and Install
 
@@ -84,45 +85,25 @@ bun install
 npm install
 ```
 
-### Step 2: Create a Neon Database
+### Step 2: Set Up the Database
 
-1. Go to [https://neon.tech](https://neon.tech) and sign up for a free account
-2. Create a new project (e.g., "Star Cuts")
-3. Copy the **connection string** — it looks like:
-   ```
-   postgresql://username:password@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
-   ```
+The project uses **SQLite** — the database file (`db/custom.db`) is included in the repository with all seed data pre-loaded. No external database setup needed!
 
-### Step 3: Set Up Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-DATABASE_URL="postgresql://username:password@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
-NEXTAUTH_SECRET="your-secret-key-here"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-> Generate a strong NEXTAUTH_SECRET: `openssl rand -base64 32`
-
-### Step 4: Set Up the Database
+If you want to reset or re-seed the database:
 
 ```bash
 # Push schema to the database
 bun run db:push
 # or
 npx prisma db push
-```
 
-### Step 5: Seed the Database (Adds Demo Data & User Accounts)
-
-```bash
+# Seed the database with demo data
 bun run db:seed
 # or
 npx prisma db seed
 ```
 
-### Step 6: Start the Development Server
+### Step 3: Start the Development Server
 
 ```bash
 bun run dev
@@ -131,46 +112,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## Deploy to Vercel (Free Hosting)
-
-### Step 1: Push Code to GitHub
-
-Make sure your code is pushed to the GitHub repository.
-
-### Step 2: Connect to Vercel
-
-1. Go to [https://vercel.com](https://vercel.com) and sign up
-2. Click **"Add New Project"**
-3. Import your GitHub repository: `Chamling420/Star-cuts`
-4. Vercel will auto-detect Next.js
-
-### Step 3: Set Environment Variables in Vercel
-
-In the Vercel project settings, add these **Environment Variables**:
-
-| Variable | Value |
-|---|---|
-| `DATABASE_URL` | Your Neon PostgreSQL connection string |
-| `NEXTAUTH_SECRET` | A strong secret key (e.g., from `openssl rand -base64 32`) |
-| `NEXTAUTH_URL` | `https://your-app-name.vercel.app` |
-
-### Step 4: Deploy
-
-Click **Deploy** and wait for the build to complete.
-
-### Step 5: Seed the Production Database
-
-After the first successful deployment, seed your production database:
-
-```bash
-# Set DATABASE_URL to your Neon connection string, then:
-npx prisma db seed
-```
-
-Or use the Neon SQL editor to run the seed queries manually.
 
 ---
 
@@ -241,7 +182,6 @@ Or use the Neon SQL editor to run the seed queries manually.
 | `GET` | `/api/payment-methods` | List payment methods | No |
 | `POST` | `/api/payment-methods` | Create payment method | Admin+ |
 | `GET` | `/api/stats` | Dashboard statistics | Super Admin |
-| `POST` | `/api/upload` | Upload a file | Admin+ |
 
 ---
 
@@ -256,7 +196,7 @@ Or use the Neon SQL editor to run the seed queries manually.
 
 ## Database Schema
 
-The application uses **PostgreSQL** (via Neon) with Prisma ORM:
+The application uses **SQLite** with Prisma ORM (database file: `db/custom.db`):
 
 - **User** — id, name, email, password, role (USER/ADMIN/SUPER_ADMIN), image, phone
 - **Service** — id, title, description, price, image, category, duration, featured, active
@@ -272,22 +212,48 @@ The application uses **PostgreSQL** (via Neon) with Prisma ORM:
 ## Project Structure
 
 ```
-src/
-├── app/
-│   ├── api/              # API routes (auth, bookings, content, etc.)
-│   ├── layout.tsx        # Root layout
-│   ├── page.tsx          # Main page (SPA router)
-│   └── globals.css       # Global styles
-├── components/
-│   ├── auth/             # Login/Register dialog
-│   ├── layout/           # Header, Footer
-│   ├── pages/            # All page components
-│   └── ui/               # Reusable UI components
-├── lib/                  # Database client, utilities
-├── store/                # Zustand state store
-├── types/                # TypeScript type definitions
-└── hooks/                # Custom React hooks
+Star-cuts/
+├── db/
+│   └── custom.db              # SQLite database (included with seed data)
+├── prisma/
+│   ├── schema.prisma          # Database schema
+│   ├── seed.ts                # Main seed file (users, services, products, etc.)
+│   └── seed-content.ts        # Content seed file
+├── public/
+│   ├── images/                # Service, product, gallery images
+│   ├── logo.svg               # Logo SVG
+│   └── robots.txt             # SEO robots file
+├── src/
+│   ├── app/
+│   │   ├── api/               # API routes (auth, bookings, content, etc.)
+│   │   ├── layout.tsx         # Root layout
+│   │   ├── page.tsx           # Main page (SPA router)
+│   │   └── globals.css        # Global styles
+│   ├── components/
+│   │   ├── auth/              # Login/Register dialog
+│   │   ├── layout/            # Header, Footer
+│   │   ├── pages/             # All page components
+│   │   └── ui/                # Reusable UI components (shadcn/ui)
+│   ├── lib/                   # Database client, auth config, utilities
+│   ├── store/                 # Zustand state store
+│   ├── types/                 # TypeScript type definitions
+│   └── hooks/                 # Custom React hooks
+├── .env                       # Environment variables (DATABASE_URL, NEXTAUTH_SECRET)
+├── package.json               # Dependencies and scripts
+├── tailwind.config.ts         # Tailwind CSS configuration
+├── tsconfig.json              # TypeScript configuration
+└── README.md                  # This file
 ```
+
+---
+
+## Environment Variables
+
+| Variable | Description | Default |
+|---|---|---|
+| `DATABASE_URL` | SQLite database path | `file:./db/custom.db` |
+| `NEXTAUTH_SECRET` | Secret key for auth sessions | (set in .env) |
+| `NEXTAUTH_URL` | Base URL for auth callbacks | `http://localhost:3000` |
 
 ---
 
