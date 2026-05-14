@@ -74,5 +74,5 @@ Star-Cuts.zip
 # Uploaded files (regenerable)
 /public/uploads/
 
-# Database - included in repo for easy setup
-# db/custom.db
+# Database (local SQLite - not needed with PostgreSQL)
+db/

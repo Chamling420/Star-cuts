@@ -56,8 +56,8 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 | **TypeScript 5** | Type-safe development |
 | **Tailwind CSS 4** | Utility-first styling |
 | **shadcn/ui** | UI component library (New York style) |
-| **Prisma ORM** | Database ORM (SQLite) |
-| **SQLite** | Lightweight file-based database (included in repo) |
+| **Prisma ORM** | Database ORM (PostgreSQL) |
+| **Neon** | Serverless PostgreSQL database |
 | **NextAuth.js v4** | Authentication & session management |
 | **Zustand** | Client-side state management |
 | **Framer Motion** | Animations & transitions |
@@ -74,6 +74,7 @@ A full-featured, modern beauty salon website built with Next.js, TypeScript, and
 ### Prerequisites
 - Node.js 18+ or Bun
 - npm, yarn, or bun
+- A [Neon](https://neon.tech) account (free tier available)
 
 ### Step 1: Clone and Install
 
@@ -85,25 +86,45 @@ bun install
 npm install
 ```
 
-### Step 2: Set Up the Database
+### Step 2: Create a Neon Database (FREE)
 
-The project uses **SQLite** — the database file (`db/custom.db`) is included in the repository with all seed data pre-loaded. No external database setup needed!
+1. Go to [https://neon.tech](https://neon.tech) and sign up for a **free account**
+2. Click **"Create Project"** → name it "Star Cuts" → select a region → **Create**
+3. Copy the **connection string** — it looks like:
+   ```
+   postgresql://neondb_owner:npg_xxxxx@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
 
-If you want to reset or re-seed the database:
+### Step 3: Set Up Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL="postgresql://neondb_owner:npg_xxxxx@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
+NEXTAUTH_SECRET="star-cuts-beauty-salon-secret-key-2024"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+> 💡 Generate a stronger NEXTAUTH_SECRET: `openssl rand -base64 32`
+
+### Step 4: Set Up the Database
 
 ```bash
-# Push schema to the database
+# Push schema to create tables in Neon
 bun run db:push
 # or
 npx prisma db push
+```
 
-# Seed the database with demo data
+### Step 5: Seed the Database (Adds Demo Data & User Accounts)
+
+```bash
 bun run db:seed
 # or
 npx prisma db seed
 ```
 
-### Step 3: Start the Development Server
+### Step 6: Start the Development Server
 
 ```bash
 bun run dev
@@ -112,6 +133,48 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## Deploy to Vercel (FREE Hosting)
+
+### Step 1: Push Code to GitHub
+
+Make sure your code is pushed to the GitHub repository.
+
+### Step 2: Connect to Vercel
+
+1. Go to [https://vercel.com](https://vercel.com) and sign up
+2. Click **"Add New Project"**
+3. Import your GitHub repository: `Chamling420/Star-cuts`
+4. Vercel will auto-detect Next.js
+
+### Step 3: Set Environment Variables in Vercel
+
+In the Vercel project settings → **Environment Variables**, add:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Your Neon PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | `star-cuts-beauty-salon-secret-key-2024` (or your custom secret) |
+| `NEXTAUTH_URL` | `https://your-app-name.vercel.app` |
+
+> ⚠️ **IMPORTANT**: You MUST add all 3 environment variables, otherwise the site will show "Internal Server Error"
+
+### Step 4: Deploy
+
+Click **Deploy** and wait for the build to complete.
+
+### Step 5: Seed the Production Database
+
+After the first successful deployment, seed your production database:
+
+```bash
+# Set DATABASE_URL to your Neon connection string, then:
+npx prisma db seed
+```
+
+Or use the Neon SQL editor at https://console.neon.tech to run queries manually.
 
 ---
 
@@ -196,7 +259,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Database Schema
 
-The application uses **SQLite** with Prisma ORM (database file: `db/custom.db`):
+The application uses **PostgreSQL** (via Neon) with Prisma ORM:
 
 - **User** — id, name, email, password, role (USER/ADMIN/SUPER_ADMIN), image, phone
 - **Service** — id, title, description, price, image, category, duration, featured, active
@@ -213,11 +276,9 @@ The application uses **SQLite** with Prisma ORM (database file: `db/custom.db`):
 
 ```
 Star-cuts/
-├── db/
-│   └── custom.db              # SQLite database (included with seed data)
 ├── prisma/
-│   ├── schema.prisma          # Database schema
-│   ├── seed.ts                # Main seed file (users, services, products, etc.)
+│   ├── schema.prisma          # Database schema (PostgreSQL)
+│   ├── seed.ts                # Main seed file
 │   └── seed-content.ts        # Content seed file
 ├── public/
 │   ├── images/                # Service, product, gallery images
@@ -238,7 +299,8 @@ Star-cuts/
 │   ├── store/                 # Zustand state store
 │   ├── types/                 # TypeScript type definitions
 │   └── hooks/                 # Custom React hooks
-├── .env                       # Environment variables (DATABASE_URL, NEXTAUTH_SECRET)
+├── .env                       # Environment variables
+├── vercel.json                # Vercel deployment config
 ├── package.json               # Dependencies and scripts
 ├── tailwind.config.ts         # Tailwind CSS configuration
 ├── tsconfig.json              # TypeScript configuration
@@ -249,11 +311,11 @@ Star-cuts/
 
 ## Environment Variables
 
-| Variable | Description | Default |
+| Variable | Description | Required |
 |---|---|---|
-| `DATABASE_URL` | SQLite database path | `file:./db/custom.db` |
-| `NEXTAUTH_SECRET` | Secret key for auth sessions | (set in .env) |
-| `NEXTAUTH_URL` | Base URL for auth callbacks | `http://localhost:3000` |
+| `DATABASE_URL` | Neon PostgreSQL connection string | ✅ Yes |
+| `NEXTAUTH_SECRET` | Secret key for auth sessions | ✅ Yes |
+| `NEXTAUTH_URL` | Base URL for auth callbacks | ✅ Yes |
 
 ---
 
